@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,4 +24,18 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
             ));
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(
+        MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(ErrorResponse.of(
+            HttpStatus.BAD_REQUEST.value(),
+            "Bad Request",
+            "Invalid value for parameter '%s': %s".formatted(ex.getName(), ex.getValue()),
+            request.getRequestURI()
+        ));
+}
 }
