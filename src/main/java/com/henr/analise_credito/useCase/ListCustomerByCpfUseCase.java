@@ -8,7 +8,10 @@ import com.henr.analise_credito.entity.Customer;
 import com.henr.analise_credito.exception.CustomerNotFoundException;
 import com.henr.analise_credito.repository.CustomerRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ListCustomerByCpfUseCase {
 
     @Autowired
@@ -16,7 +19,10 @@ public class ListCustomerByCpfUseCase {
 
     public CustomerDTO execute(String cpf) {
         Customer customer = customerRepository.findByCpf(cpf)
-          .orElseThrow(() -> new CustomerNotFoundException());
+          .orElseThrow(() -> {
+            log.warn("Customer not found for cpf: {}", cpf);
+            return new CustomerNotFoundException();
+          });
 
         return new CustomerDTO(
             customer.getId(),
