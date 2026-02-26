@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.henr.analise_credito.dto.CreateCustomerResponseDTO;
 import com.henr.analise_credito.dto.CustomerDTO;
 import com.henr.analise_credito.exception.ErrorResponse;
 import com.henr.analise_credito.useCase.CreateCustomerUseCase;
+import com.henr.analise_credito.useCase.DeleteCustomerUseCase;
 import com.henr.analise_credito.useCase.ListAllCustomersUseCase;
 import com.henr.analise_credito.useCase.ListCustomerByCpfUseCase;
 import com.henr.analise_credito.useCase.ListCustomerByIdUseCase;
@@ -39,6 +41,7 @@ public class CustomerController {
     private final ListCustomerByCpfUseCase listCustomerByCpfUseCase;
     private final ListCustomerByIdUseCase listCustomerByIdUseCase;
     private final CreateCustomerUseCase createCustomerUseCase;
+    private final DeleteCustomerUseCase deleteCustomerUseCase;
 
     @GetMapping
     @Operation(
@@ -105,5 +108,20 @@ public class CustomerController {
     )
     public ResponseEntity<CreateCustomerResponseDTO> CreateCustomer(@RequestBody CreateCustomerRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createCustomerUseCase.execute(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(
+        summary = "Delete a customer",
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Customer deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Customer not found",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)))
+        }
+    )
+    public ResponseEntity<Void> deleteCustomer(@PathVariable UUID id) {
+        deleteCustomerUseCase.execute(id);
+        return ResponseEntity.noContent().build();
     }
 }
