@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/customers")
-@Tag(name = "Customers", description = "Gerenciamento de clientes")
+@Tag(name = "Customers", description = "Customer management")
 @RequiredArgsConstructor
 public class CustomerController {
 
@@ -31,12 +31,12 @@ public class CustomerController {
 
     @GetMapping("/cpf/{cpf}")
     @Operation(
-        summary = "Buscar cliente por CPF",
+        summary = "Find customer by CPF",
         responses = {
-            @ApiResponse(responseCode = "200", description = "Cliente encontrado",
+            @ApiResponse(responseCode = "200", description = "Customer found",
                 content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = CustomerDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Cliente não encontrado",
+            @ApiResponse(responseCode = "404", description = "Customer not found",
                 content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))
         }
@@ -48,12 +48,12 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     @Operation(
-        summary = "Buscar cliente por ID",
+        summary = "Find customer by ID",
         responses = {
-            @ApiResponse(responseCode = "200", description = "Cliente encontrado",
+            @ApiResponse(responseCode = "200", description = "Customer found",
                 content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = CustomerDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Cliente não encontrado",
+            @ApiResponse(responseCode = "404", description = "Customer not found",
                 content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ErrorResponse.class)))
         }
