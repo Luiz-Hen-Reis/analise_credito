@@ -37,5 +37,19 @@ public class GlobalExceptionHandler {
             "Invalid value for parameter '%s': %s".formatted(ex.getName(), ex.getValue()),
             request.getRequestURI()
         ));
-}
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyExists(
+        ResourceAlreadyExistsException ex, HttpServletRequest request) {
+
+    return ResponseEntity
+        .status(HttpStatus.CONFLICT)
+        .body(ErrorResponse.of(
+            HttpStatus.CONFLICT.value(),
+            "Conflict",
+            ex.getMessage(),
+            request.getRequestURI()
+        ));
+    }
 }
