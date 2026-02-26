@@ -25,7 +25,7 @@ public class CreateCustomerUseCase {
       
     if (existingCustomer.isPresent()) {
       log.warn("Customer already exists with CPF: {}", dto.cpf());
-      throw new ResourceAlreadyExistsException("Customer", "CPF", existingCustomer);
+      throw new ResourceAlreadyExistsException("Customer", "CPF", dto.cpf());
     }
 
     Customer customer = Customer.builder()
