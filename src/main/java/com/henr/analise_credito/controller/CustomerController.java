@@ -1,5 +1,6 @@
 package com.henr.analise_credito.controller;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import com.henr.analise_credito.dto.CreateCustomerResponseDTO;
 import com.henr.analise_credito.dto.CustomerDTO;
 import com.henr.analise_credito.exception.ErrorResponse;
 import com.henr.analise_credito.useCase.CreateCustomerUseCase;
+import com.henr.analise_credito.useCase.ListAllCustomersUseCase;
 import com.henr.analise_credito.useCase.ListCustomerByCpfUseCase;
 import com.henr.analise_credito.useCase.ListCustomerByIdUseCase;
 
@@ -33,9 +35,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class CustomerController {
 
+    private final ListAllCustomersUseCase listAllCustomersUseCase;
     private final ListCustomerByCpfUseCase listCustomerByCpfUseCase;
     private final ListCustomerByIdUseCase listCustomerByIdUseCase;
     private final CreateCustomerUseCase createCustomerUseCase;
+
+    @GetMapping
+    @Operation(
+        summary = "Find all customers",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Customers found",
+                content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = CustomerDTO.class))),
+        }
+    )
+    public ResponseEntity<List<CustomerDTO>> listAllCustomers() {
+        List<CustomerDTO> customers = listAllCustomersUseCase.execute();
+        return ResponseEntity.ok(customers);
+    }
 
     @GetMapping("/cpf/{cpf}")
     @Operation(
@@ -89,5 +106,4 @@ public class CustomerController {
     public ResponseEntity<CreateCustomerResponseDTO> CreateCustomer(@RequestBody CreateCustomerRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createCustomerUseCase.execute(dto));
     }
-    
 }
