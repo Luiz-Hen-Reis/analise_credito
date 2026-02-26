@@ -17,5 +17,4 @@ public class CreditRequest {
     private Integer installments;
     private Integer creditScore;
     private Integer recentQueries;
-    private Boolean isBlacklisted;
 }
