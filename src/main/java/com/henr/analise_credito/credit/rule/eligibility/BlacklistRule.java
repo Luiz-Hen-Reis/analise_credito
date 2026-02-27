@@ -16,7 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 public class BlacklistRule implements CreditRule {
 
     private static final double BLACKLIST_PROBABILITY = 0.20; // 20%
-    private final Random random = new Random();
+    private final Random random;
+
+    public BlacklistRule() {
+        this.random = new Random();
+    }
+
+    public BlacklistRule(Random random) {
+        this.random = random;
+    }
 
     @Override
     public boolean isSatisfiedBy(CreditRequest request) {
